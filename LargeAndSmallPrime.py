@@ -1,6 +1,4 @@
-import math
 import random
-import mpmath
 
 print("Enter 0 to print a small list of prime number in a range you need")
 print("Enter 1 to print a random large prime number")
@@ -39,7 +37,7 @@ def checkLargePrime(number, iterations):
     bn = b0
     for _ in range(iterations):
         bn = (bn*bn)%number
-        if (bn==1 or bn==number-1):
+        if (bn==number-1):
             return True
     return False
 
