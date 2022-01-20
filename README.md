@@ -12,5 +12,3 @@ Input 1 - to get a large prime(possibly) using Miller Rabin algorithm. This can 
 5. QuadraticProbeHashing - Same as BasicHashFunction. Returns unique values only, with the help of quadratic probing.
 
 I will be adding more code as I keep going forward.
-Please feel free to reuse any of these codes for your work.
-Although I do not gaurentee complete correctness of these codes.
