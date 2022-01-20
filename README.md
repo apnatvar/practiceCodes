@@ -1,4 +1,4 @@
-Hi, these are more than just practice codes. Some of these are codes that you are free to reuse. 
+Hi, these are more than just practice codes. You can probably reuse all of these directly or in some form for your projects. 
 Below is a description of each file. To look for the file you want press Command+F on a Mac-Safari and ctrl+f on Windows-Chrome
 Files 
 1. AlphaToASCII - A very simple code. Takes a string as input and outputs the ASCII Values of each character
