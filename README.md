@@ -15,5 +15,11 @@ Input 1 - to get a large prime(possibly) using Miller Rabin algorithm. This can 
 8. treeBFS - Moves through the tree level wise, Performs best first search on the tree.
 9. SearchInRotatedArray - a rotated array is aa sorted array that was 'rotated' 
 Ex: [1,2,3,4,5] is a sorted array and [3,4,5,1,2] is the rotated sorted array. Searches in such using Binary Search / without any sorting.
+10. ConnectNodesAtSameLevel - connects all nodes at the same level in a bast as a linked list by modifying the original structure.
+11. FindMissingAndReapeat - in a non-sorted array of 1-n+1 there is 1 number missing and 1 number entered twice. Finds and prints the missing and double number.
+12. DeleteWithoutHeadPointer - function is passed the address of the element ot be deleted but the head node is not available. Deletes this head node.
+13. PrintLast10 - prints last the last 10 lines in a large string. If less than 10 strings are available, will print all of those.
+14. BinaryAdditionAndSubtracation - performs addition and subration using binary. Without using arithmetic operators.
+15. MaxXORSubaray - Finds the max Xor n the subarray using Kadane's Algorithm
 
 I will be adding more code as I keep going forward.
