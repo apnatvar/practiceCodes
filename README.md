@@ -21,5 +21,13 @@ Ex: [1,2,3,4,5] is a sorted array and [3,4,5,1,2] is the rotated sorted array. S
 13. PrintLast10 - prints last the last 10 lines in a large string. If less than 10 strings are available, will print all of those.
 14. BinaryAdditionAndSubtracation - performs addition and subration using binary. Without using arithmetic operators.
 15. MaxXORSubaray - Finds the max Xor n the subarray using Kadane's Algorithm
+16. FibNumOptimised - Recursive approaach with memoization to find the nth number in a fibonacci series
+17. BuildWordandHow - Construct a given word from a list of substring and output every possible combination that constructs the original word
+18. BuildWordfromGivenSubstring - check if a given word can be constructed from a list of substrings or not
+19. TargetSumwithMinNumberstoAdd - output the smallest set up of numbers from a list that add up to a given number
+20. CountWaystoBuildWord - count the number of ways given substrings can be arranged ot make the given word
+21. TargetSumwithNumbersToAdd - reach the target number by adding numbers and display any one of the solutions
+22. TargetSumfromGivenNumbers - output if you can/cannot read the target with the given lsit o fnumbers
+23. GridTravellingOptimised - used a recursive approach and memoization to calculate the number of ways you can reach the bottom right box in the grid from the top left.
 
 I will be adding more code as I keep going forward.
