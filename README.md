@@ -29,5 +29,9 @@ Ex: [1,2,3,4,5] is a sorted array and [3,4,5,1,2] is the rotated sorted array. S
 21. TargetSumwithNumbersToAdd - reach the target number by adding numbers and display any one of the solutions
 22. TargetSumfromGivenNumbers - output if you can/cannot read the target with the given lsit o fnumbers
 23. GridTravellingOptimised - used a recursive approach and memoization to calculate the number of ways you can reach the bottom right box in the grid from the top left.
+24. qrcode - python code to generate a QRCode for a given link. 
+25. goldenGoal - 2 players try to score a goal to win the game on a 3x5 grid. Outputs grid after every turn on cmd. Players can chose to kick the ball (to a random location) or move with the ball, tackle and move, save goals.
+26. website - folder contains code I am developing for my portfolio website. This will be hosted on AWS S3 when I finish with the codes.
+27. fcc_sciComp - codes I wrote for my freeCodeCamp Scientific Computing with Python Certificaion, accessed at https://freecodecamp.org/certification/fcc901fd6a0-d5f9-498d-b8e0-a27d204a8976/scientific-computing-with-python-v7
 
 I will be adding more code as I keep going forward.
