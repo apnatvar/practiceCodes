@@ -1,0 +1,219 @@
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+  </head>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    tr:nth-child(even){
+      background-color: #dddddd;
+    }
+  </style>
+  <body>
+    <div class="heading">
+      <h2>Find forecast for next 4 days</h2>
+    </div>
+    <div id="app">
+      <div class="searching">
+        <div class="search-bar">
+            <input v-model="city" type="text" placeholder="Select a City" name="search-bar">
+            <input v-model="country" type="text" placeholder="Search a Country" name="search-bar">
+              <button v-on:click="randomLocation(); runAPI()" type="submit">
+                <i class="search-button">Display Weather</i>
+              </button>
+            </input>
+        </div>
+        <h2>OR</h2>
+        <div class="current-pos-search-div">
+          <button @click="currentLocation();" type="submit">
+            <i class="current-pos-search">Find Current Location</i>
+          </button>
+          <button @click="runAPI();" type="submit">
+            <i class="current-pos-search">Find Weather</i>
+          </button>
+        </div>
+        <div class="search-bar">
+          <button v-on:click="runAPIPol();" type="submit">
+           <i class="search-button">Get Pollution Information</i>
+         </button>
+         <i>: {{ pollution }} </i>
+        </div>
+      </div>
+      <div class="i">{{ rainy_days }}</div>
+      <div class="i">{{ warm_mild_cold }}</div>
+      <table>
+        <tr id="result-table"> 
+          <th></th>       
+          <th>City</th>
+          <th>Country</th>
+          <th>Weather</th>
+          <th>Average Temp</th>
+          <th>Rainfall</th>
+          <th>Wind Speed</th>
+        </tr>
+        <tr v-for="d in weatherReport">
+          <td>{{ d.day }}</td>
+          <td>{{ d.city }}</td>
+          <td>{{ d.country }}</td>
+          <td>{{ d.weather }} - {{ d.weather_desc }}</td>
+          <td>{{ d.avg_temp.toFixed(2) }} K / {{ (d.avg_temp - 273).toFixed(2) }}°C</td>
+          <td>{{ d.rain }} mm</td>
+          <td>{{ d.wind_speed }} m/sec</td>
+        </tr>
+      </table>
+      <div class="download-button">            
+        <button v-on:click="exportToJsonFile()">
+          <i class="download-data">Download Data as JSON</i>
+        </button>
+      </div>
+    </div>
+    <script type="module">
+      import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+      createApp({
+        data() {
+          return {
+            longitude: 0,
+            latitude: 0,
+            city: "",
+            country: "",
+            pollution: "",
+            rainy_days: "Rain Information",
+            warm_mild_cold: "Temperature Information",
+            weatherReport: [],
+            weatherReportHistory: []
+          }
+        },
+        methods: {
+          currentLocation,
+          randomLocation,
+          getCityName,
+          runAPI,
+          runAPIPol,
+          exportToJsonFile
+        }
+      }
+    ).mount('#app')
+    function currentLocation() {
+      // uses the built in HTML Geolocation API to get the co-ordinates for the user position.
+      const success = (position) => {
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+        fetch("get-name/" + this.latitude + "/" + this.longitude) // retrieve name from server
+        .then( response => {
+          return response.json();   
+        })
+        .then( data => {
+          this.city = data.city;
+          this.country = data.country;
+        });
+      };
+      const error = (err) => {
+        console.log(error)
+      };
+      return navigator.geolocation.getCurrentPosition(success, error);
+    }
+    function randomLocation() {
+      console.log(this.city);
+      console.log(this.country);
+      let query = this.city + "," + this.country;
+      fetch( "/get-coord/" + query) // retrieve co-ordinates from the server
+        .then( response => {
+          return response.json();   
+        })
+        .then( data => {
+          this.latitude = data.lat;
+          this.longitude = data.lon;
+        });
+    }
+    function getCityName(){
+      console.log("get-name/" + this.latitude + "/" + this.longitude) // retrieve data from server
+      fetch("get-name/" + this.latitude + "/" + this.longitude)
+        .then( response => {
+          return response.json();   
+        })
+        .then( data => {
+          this.city = data.city;
+          this.country = data.country;
+        });
+    }
+    function runAPI() { 
+      fetch("weather-report/" + this.latitude + "/" + this.longitude + "/" + this.city + "/" + this.country) // retrieve data from server
+        .then( response => {
+          return response.json();   
+        })
+        .then( data => {
+          this.weatherReport = data; // this will be used in constructing the table
+          this.weatherReportHistory = this.weatherReportHistory.concat(data); // this wil keep track of all the locations searched for. 
+          // it is also the data availalble for download to the client
+          let average_rain = 0.0;
+          let average_temp_4_day = 0.00;
+          for (const i in data){ // summing up toal rain and temperature 
+            average_rain = average_rain + data[i].rain;
+            average_temp_4_day = average_temp_4_day + parseFloat((data[i].avg_temp - 273).toFixed(2));
+          }
+          average_rain = (average_rain / 4.0).toFixed(2);
+          average_temp_4_day = (average_temp_4_day / 4.0).toFixed(2);
+          if (average_rain > 0){
+            this.rainy_days = `Some Rainfall Expected - ${average_rain}mm (4 day Average). Carry an Umbrella`;
+          } else {
+            this.rainy_days = `No expected Rainfall`;
+          }
+          if (average_temp_4_day > 24){
+            this.warm_mild_cold = `Average Temperature over the next 4 days is ${average_temp_4_day}. Hot.`;
+          } else if (average_temp_4_day < 12){
+            this.warm_mild_cold = `Average Temperature over the next 4 days is ${average_temp_4_day}. Cold.`;
+          } else {
+            this.warm_mild_cold = `Average Temperature over the next 4 days is ${average_temp_4_day}. Mild.`;
+          }
+        });
+    }
+    function runAPIPol(){
+      fetch("get-pollution/" + this.latitude + "/" + this.longitude)  // fetch from the server
+        .then( response => {
+          return response.json();   
+        })
+        .then( data => {
+          let average = 0.0;
+          let higher_than_10 = false;
+          let length = 0.0 ;
+          for (const i in data){
+            if (data[i].components.pm2_5 > 10){ // pollution can high on certain days, while the average pollution stays low.
+              higher_than_10 = true;
+            }
+            length = length + 1.0;
+            average = average + data[i].components.pm2_5; // calculate average pollution over 5 days
+          }
+          average = parseFloat((average / length).toFixed(2));
+          if (higher_than_10){
+            if (average >= 10){
+              this.pollution = `High Pollution - ${average} µg/m3. Please Wear a Mask.`
+            } else {
+              this.pollution = `Low Average Pollution - ${average} µg/m3. Can exceed threshold of 10 on certain days. Consider carrying a Mask.`
+            }
+          } else {
+            this.pollution = `Low Pollution - ${average} µg/m3.`
+          }
+        });
+    }
+    function exportToJsonFile() { // obtained from www.codevoila.com
+      let dataStr = JSON.stringify(this.weatherReportHistory); // convert JSON to string
+      let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr); // set parameters
+      let exportFileDefaultName = 'weather-data.json'; // file name
+      let linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    }    
+    </script>
+  </body>
+</html>
